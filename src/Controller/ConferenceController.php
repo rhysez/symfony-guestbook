@@ -2,17 +2,19 @@
 
 namespace App\Controller;
 
+use App\Repository\ConferenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Environment;
 
 final class ConferenceController extends AbstractController
 {
-    #[Route('/conference', name: 'app_conference')]
-    public function index(): Response
+    #[Route('/', name: 'homepage')]
+    public function index(Environment $twig, ConferenceRepository $conferenceRepository): Response
     {
-        return $this->render('conference/index.html.twig', [
-            'controller_name' => 'ConferenceController',
-        ]);
+        return new Response($twig->render('conference/index.html.twig', [
+            'conferences' => $conferenceRepository->findAll(),
+        ]));
     }
 }
