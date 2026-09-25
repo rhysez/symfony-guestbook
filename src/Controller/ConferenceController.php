@@ -26,13 +26,11 @@ final class ConferenceController extends AbstractController
     public function show(
         #[MapEntity] Conference $conference,
         CommentRepository $commentRepository,
-        ConferenceRepository $conferenceRepository,
         #[MapQueryParameter(options: ['min_range' => 0])] int $offset = 0): Response
     {
         $paginator = $commentRepository->getCommentPaginator($conference, $offset);
 
         return $this->render('conference/show.html.twig', [
-            'conferences' => $conferenceRepository->findAll(),
             'conference' => $conference,
             'comments' => $paginator,
             'previous' => $offset - CommentRepository::COMMENTS_PER_PAGE,
